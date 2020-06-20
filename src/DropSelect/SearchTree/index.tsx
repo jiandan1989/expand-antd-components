@@ -3,13 +3,15 @@
  */
 
 import React, { FC, useEffect } from 'react';
-import { Tree } from 'antd';
+import { Tree, Input } from 'antd';
+import { SearchOutlined } from '@ant-design/icons';
 import useUpdateState from '@/hooks/useUpdateState';
 
-import treeData from './_mock';
 import { SearchTreeProps } from '../interface';
+import styles from './index.less';
 
 const SearchTree: FC<SearchTreeProps> = props => {
+  const { showSearch = true } = props;
   const [state, { setState }] = useUpdateState({
     checkedKeys: props.value || [],
   });
@@ -28,13 +30,24 @@ const SearchTree: FC<SearchTreeProps> = props => {
   };
 
   return (
-    <Tree
-      checkable
-      // checkStrictly
-      checkedKeys={state.checkedKeys}
-      onCheck={onPropsChange}
-      treeData={treeData}
-    />
+    <div>
+      {showSearch && (
+        <div className={styles.search}>
+          <Input
+            prefix={<SearchOutlined />}
+            size="small"
+            placeholder="输入关键词搜索"
+          />
+        </div>
+      )}
+      <Tree
+        checkable
+        // checkStrictly
+        checkedKeys={state.checkedKeys}
+        onCheck={onPropsChange}
+        treeData={props.treeData}
+      />
+    </div>
   );
 };
 
