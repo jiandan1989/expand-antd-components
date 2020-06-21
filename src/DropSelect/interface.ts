@@ -1,10 +1,9 @@
 import { ReactNode } from 'react';
 import { ActionType } from 'rc-trigger/lib/interface';
 import { ButtonProps } from 'antd/lib/button';
-import { TreeProps as RcTreeProps } from 'rc-tree';
+// import { TreeProps as RcTreeProps } from 'rc-tree';
+import { DataNode } from 'rc-tree/lib/interface';
 import { PopoverProps } from 'antd/lib/popover';
-
-export type ValueType = string[];
 
 interface BaseProps {
   className?: string;
@@ -17,9 +16,9 @@ export interface ValueContentProps extends BaseProps {
   /** 左侧描述文案或自定义组件 */
   label?: ReactNode;
   /** 默认值 */
-  value?: ValueType;
+  value?: string[];
   /** 自定义格式化 */
-  formatter?: (value: ValueType) => string;
+  formatter?: (value: string[]) => string;
   /** 传递数组时支持自定义分割符 */
   tokenSeparator?: string;
   /** 占位符 */
@@ -31,22 +30,17 @@ export interface ValueContentProps extends BaseProps {
 }
 
 type FilterOmitTypes = 'defaultVisible' | 'visible';
-/** 清空操作 */
-type CleanType = {
-  show?: boolean;
-  text?: ReactNode;
-};
 
 /** 搜索树 */
 export interface SearchTreeProps {
   /** 是否支持搜索 */
   showSearch?: boolean;
   /** 树形结构的值 */
-  treeData?: RcTreeProps['treeData'];
+  treeData: DataNode[];
   /** 默认值 对应的是 Tree 的 checkedKeys */
-  value?: ValueType;
+  value?: string[];
   /** 监听选择事件 */
-  onChange?: (keys: ValueType) => void;
+  onChange?: (keys: string[], checkedList?: any[]) => void;
 }
 
 type ExtendsType = Omit<PopoverProps, FilterOmitTypes> & SearchTreeProps;
@@ -60,12 +54,14 @@ export interface DropSelectProps extends ExtendsType {
   /** 触发 */
   trigger?: ActionType | ActionType[];
   valueProps?: Omit<ValueContentProps, 'value'>;
+  /** 展示内容 value 的类型 */
+  valueType: 'key' | 'title';
   /** 是否展示选择项 */
   showItems?: (value: ValueContentProps['value']) => ReactNode | boolean;
   /** 点击已选择项目数回调函数 */
   onItemsClick?(count: number): void;
   /** 底部操作: 是否需要清空操作 */
-  actions?: { clean?: boolean /**| CleanType  */ };
+  actions?: { clean?: boolean };
   renderFooter?: (actions: Required<DropSelectProps['actions']>) => ReactNode;
   /** 确定回调 */
   onOk?(value: string[]): void;

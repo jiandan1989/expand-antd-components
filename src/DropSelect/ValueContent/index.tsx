@@ -1,7 +1,8 @@
 /**
  * 显示内容区域
  */
-import React, { FC, useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, forwardRef, useRef } from 'react';
+import { findDOMNode } from 'react-dom';
 import classnames from 'classnames';
 import { DownOutlined } from '@ant-design/icons';
 
@@ -42,7 +43,8 @@ const getValueText = ({
   return value || placeholder;
 };
 
-const ValueContent: FC<ValueContentProps> = props => {
+const ValueContent = forwardRef<any, ValueContentProps>((props, ref) => {
+  const valueRef = useRef<any>();
   const {
     suffixIcon = true,
     value,
@@ -74,13 +76,28 @@ const ValueContent: FC<ValueContentProps> = props => {
     props.maxWidth,
   ]);
 
+  /** 获取真实 DOM 宽度等
+   * 参考: https://github.com/ant-design/ant-design/blob/master/components/typography/Base.tsx
+   * 1. 获取到整个 value content 宽度
+   * 2. 获取到当前字体大小 及所有 value textContent 的值 整体计算后的宽度
+   * 3. 如果容器宽度 大于 计算后的宽度
+   *    (1). 计算整个内容区域的 分割后的长度 及 value.length 展示 等 value.length 项
+   *    (2). 如果是React 组件, 参考 antd Typography 如何计算 ? 以及展示区域如何显示 ... 等
+   */
+  // console.log(
+  //   findDOMNode(valueRef.current)?.getBoundingClientRect(),
+  //   '>>>>>>>>>>>>',
+  // );
+
   return (
-    <span className={kls} style={lastStyles}>
+    <span className={kls} style={lastStyles} ref={ref}>
       {props.label && <span className={styles.label}>{props.label}</span>}
-      <span className={styles.value}>{valueText}</span>
+      <span className={styles.value} ref={valueRef}>
+        {valueText}
+      </span>
       <span className={styles.suffix}>{renderSuffix()}</span>
     </span>
   );
-};
+});
 
 export default ValueContent;

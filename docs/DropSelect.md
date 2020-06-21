@@ -15,7 +15,6 @@ export default () => {
       onChange={val => {
         setValue(val);
       }}
-      okButtonProps={{ disalbed: true }}
       actions={{ clean: true }}
       treeData={treeData}
       valueProps={{
@@ -60,6 +59,7 @@ export default () => {
           valueProps={{
             label: '描述信息: ',
           }}
+          actions={{ clean: true }}
         />
       </Form.Item>
       <Form.Item label="表单值">
@@ -107,3 +107,9 @@ export default () => {
 | `treeData`   | 树形结构的值 | `TreeData`                 | `-`    |
 | `value`      | 默认值       | `string[]`                 | `-`    |
 | `onChange`   | 监听选择事件 | `(keys: string[]) => void` | `-`    |
+
+### 其他问题
+
+- 这里为什么不使用 `TreeSelect` 呢 ?
+
+> 其实 TreeSelect 如果没有记错的话有一个可以控制自动展开 `autoFocus`的属性, 但是 API 中并没有体现出来,使用 TreeSelect 也是可以的

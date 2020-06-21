@@ -1,18 +1,28 @@
-import React, { FC, useRef, useCallback, useMemo, useEffect } from 'react';
+import React, {
+  FC,
+  useRef,
+  useMemo,
+  useState,
+  useEffect,
+  useCallback,
+} from 'react';
 import { Empty, Button, Popover, message } from 'antd';
 import { useBoolean } from 'ahooks';
+import useUpdateState from '@/hooks/useUpdateState';
 
 import ValueContent from './ValueContent';
-import styles from './index.less';
-import { DropSelectProps } from './interface';
 import SearchTree from './SearchTree';
-import useUpdateState from '@/hooks/useUpdateState';
+import { DropSelectProps } from './interface';
+import styles from './index.less';
 
 const DropSelect: FC<DropSelectProps> = props => {
   /** 控制是否显示 */
   const [visible, { toggle, setFalse }] = useBoolean();
-  const { showItems = true } = props;
+  const { showItems = true, valueType = 'title' } = props;
   const ref = useRef<any>();
+
+  /** 选中的数据 */
+  const [list, setList] = useState<any[]>([]);
   const [state, { setState }] = useUpdateState({
     value: props.value || [],
   });
@@ -21,15 +31,31 @@ const DropSelect: FC<DropSelectProps> = props => {
     setState({ value: props.value || [] });
   }, [props.value]);
 
+  /** 点击其他地方关闭 */
+  // const handler = (event: Event) => {
+  //   if (!document.querySelector(`.${styles.trigger_wrapper}`)?.contains(event.target)) {
+  //     // @todo
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   document.addEventListener('click', handler);
+  //   return () => {
+  //     document.removeEventListener('click', handler);
+  //   };
+  // }, []);
+
   /** 清空 */
   const clean = useCallback(() => {
     setState({ value: [] });
   }, []);
 
-  const onChangeTree = (keys: string[]) => {
+  const onChangeTree = (keys: string[], checkedList: any[]) => {
     if (props.onChange) {
       props.onChange(keys);
     }
+
+    setList(checkedList);
 
     setState({ value: keys });
   };
@@ -42,11 +68,10 @@ const DropSelect: FC<DropSelectProps> = props => {
 
     if (props.onChange) {
       props.onChange(state.value);
-      return;
     }
 
     if (props.onOk) {
-      props.onOk([]);
+      props.onOk(state.value);
     }
 
     setFalse();
@@ -98,6 +123,7 @@ const DropSelect: FC<DropSelectProps> = props => {
       <div className={styles.pop_content}>
         <SearchTree
           value={state.value}
+          // @ts-ignore
           onChange={onChangeTree}
           treeData={props.treeData}
         />
@@ -128,6 +154,11 @@ const DropSelect: FC<DropSelectProps> = props => {
     toggle();
   };
 
+  const valueList = useMemo(
+    () => (valueType === 'key' ? state.value : list.map(item => item.title)),
+    [valueType, state.value, list],
+  );
+
   return (
     <Popover
       visible={visible}
@@ -138,7 +169,7 @@ const DropSelect: FC<DropSelectProps> = props => {
       overlayStyle={{ minHeight: 400 }}
     >
       <span ref={ref} className={styles.trigger_wrapper} onClick={trigger}>
-        <ValueContent {...props.valueProps} value={state.value} />
+        <ValueContent {...props.valueProps} value={valueList} />
       </span>
     </Popover>
   );
