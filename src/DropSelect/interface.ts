@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 import { ActionType } from 'rc-trigger/lib/interface';
 import { ButtonProps } from 'antd/lib/button';
+import { DropDownProps } from 'antd/lib/dropdown';
 // import { TreeProps as RcTreeProps } from 'rc-tree';
 import { DataNode } from 'rc-tree/lib/interface';
 import { PopoverProps } from 'antd/lib/popover';
@@ -69,3 +70,8 @@ export interface DropSelectProps extends ExtendsType {
 
 /** 下拉展示内容操作 */
 export interface PopContentProps extends BaseProps {}
+
+/** 使用 DropDown版本 */
+export interface DropDownSelectProps {
+  trigger?: DropDownProps['trigger'];
+}
