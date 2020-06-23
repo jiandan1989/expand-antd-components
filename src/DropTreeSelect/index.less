@@ -1,0 +1,65 @@
+.trigger_wrapper {
+  display: inline-block;
+
+  /** 修改 Popover 样式 */
+  :global {
+    .ant-popover-arrow {
+      display: none;
+    }
+
+    .ant-popover-content {
+      transform: translateY(-8px);
+
+      .ant-popover-inner-content {
+        padding: 0;
+      }
+    }
+  }
+}
+
+.content_wrapper {
+  max-height: 400px;
+  overflow: auto;
+  // padding: 12px;
+
+  .menu_wrapper {
+    border: none;
+  }
+}
+
+.item_wrapper {
+  display: flex;
+  align-items: center;
+
+  .item_content {
+    flex: 100%;
+  }
+}
+
+.pop_content {
+  background-color: transparent;
+}
+
+.pop_footer {
+  padding: 8px 12px;
+  border-top: 1px #eee solid;
+  font-size: 12px;
+  color: #999;
+
+  .items {
+    line-height: 1;
+    // transform: scale(0.8);
+  }
+
+  .actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 5px;
+
+    .clean {
+      padding: 3px 0;
+      cursor: pointer;
+    }
+  }
+}
