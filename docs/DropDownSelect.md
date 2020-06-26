@@ -73,7 +73,6 @@ export default () => {
           valueProps={{
             label: 'value formatter',
             formatter: values => {
-              // return values.map(item => <Tag key={item}>{item}</Tag>);
               return (
                 <Tooltip title={values.join(', ')}>{values.join('<>')}</Tooltip>
               );
@@ -139,22 +138,6 @@ type ItemData = {
   children?: ItemData[];
 };
 
-interface ValueContentProps extends BaseProps {
-  /** 左侧描述文案或自定义组件 */
-  label?: ReactNode;
-  /** 默认值 */
-  value?: string[];
-  /** 自定义格式化 */
-  formatter?: (value: string[]) => string;
-  /** 传递数组时支持自定义分割符 */
-  tokenSeparator?: string;
-  /** 占位符 */
-  placeholder?: ReactNode;
-  /** 后缀 Icon */
-  suffixIcon?: ReactNode | boolean;
-  /** 展示区域最大宽度 */
-  maxWidth?: number;
-}
 ```
 
 ### Bugs

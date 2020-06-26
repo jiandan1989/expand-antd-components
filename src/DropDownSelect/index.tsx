@@ -15,8 +15,8 @@ import { Menu, Space, Button, Checkbox, Dropdown } from 'antd';
 import { CheckOutlined } from '@ant-design/icons';
 import { useBoolean } from 'ahooks';
 import useUpdateState from '@/hooks/useUpdateState';
+import EllipsisText from '@/EllipsisText';
 
-import ValueContent from './ValueContent';
 import { DropDownSelectProps, ItemData } from './interface';
 import {
   isChecked,
@@ -211,7 +211,7 @@ const DropDownSelect: FC<DropDownSelectProps> = props => {
       getPopupContainer={() => ref.current}
     >
       <span ref={ref}>
-        <ValueContent value={checkedValues} {...props.valueProps} />
+        <EllipsisText value={checkedValues} {...props.valueProps} />
       </span>
     </Dropdown>
   );

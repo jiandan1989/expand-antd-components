@@ -7,8 +7,10 @@ import React, { useState } from 'react';
 import { DropSelect } from 'expand-antd-components';
 import treeData from './_mock.ts';
 
+const defaultValue = ['0-0-0', '0-0-0-1'];
+
 export default () => {
-  const [value, setValue] = useState<string[]>(['0-0-0']);
+  const [value, setValue] = useState<string[]>(defaultValue);
   return (
     <DropSelect
       value={value}
@@ -35,13 +37,14 @@ import { Form } from 'antd';
 import { DropSelect } from 'expand-antd-components';
 import treeData from './_mock.ts';
 
+const defaultValue = ['0-0-0', '0-0-0-1'];
 const layout = {
   wrapperCol: { span: 16 },
   labelCol: { span: 8 },
 };
 
 export default () => {
-  const [value, setValue] = useState<string[]>(['0-0-0']);
+  const [value, setValue] = useState<string[]>(defaultValue);
   const [form] = Form.useForm();
 
   return (

@@ -7,8 +7,7 @@
   font-size: 12px;
   border-bottom: 1px #999 solid;
   white-space: nowrap;
-  // min-width: 200px;
-  width: max-content;
+  min-width: 200px;
   max-width: 300px;
   transition: all 0.2s linear;
 
@@ -20,7 +19,12 @@
   .value {
     flex: 100%;
     overflow: hidden;
-    text-overflow: ellipsis;
+
+    :global {
+      .ant-typography {
+        margin-bottom: 0;
+      }
+    }
   }
 
   .suffix {

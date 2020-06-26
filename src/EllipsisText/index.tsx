@@ -1,57 +1,35 @@
 /**
  * 显示内容区域
  */
-import React, { useCallback, useMemo, forwardRef, useRef } from 'react';
-import { findDOMNode } from 'react-dom';
+import React, {
+  useCallback,
+  useMemo,
+  useEffect,
+  forwardRef,
+  useRef,
+} from 'react';
+import { Typography } from 'antd';
 import classnames from 'classnames';
 import { DownOutlined } from '@ant-design/icons';
+import useUpdateState from '@/hooks/useUpdateState';
 
-import { ValueContentProps } from '../interface';
+import { EllipsisTextProps } from './interface';
+import { getValueText, getLastStyles, getEllipsisText } from './helper';
 import styles from './index.less';
 
-const baseWidth = 300;
-const baseStyle = { maxWidth: baseWidth };
-
-/** @todo: 是否需要判断如果小于一定的值就无法正常显示 value */
-const getLastStyles = (style?: React.CSSProperties, maxWidth?: number) => {
-  if (maxWidth) {
-    return Object.assign(baseStyle, { maxWidth }, style);
-  }
-
-  return Object.assign(baseStyle, style);
-};
-
-/** 获取内容展示 */
-const getValueText = ({
-  value,
-  formatter,
-  placeholder,
-  tokenSeparator,
-}: any) => {
-  if (!value) return placeholder;
-  /** 优先使用接收到的格式化函数 */
-  if (formatter) {
-    return formatter(value);
-  }
-  if (Array.isArray(value)) {
-    return value.join(tokenSeparator || ',');
-  }
-  if (typeof value === 'string') {
-    return value;
-  }
-
-  return value || placeholder;
-};
-
-const ValueContent = forwardRef<any, ValueContentProps>((props, ref) => {
+const EllipsisText = forwardRef<any, EllipsisTextProps>((props, ref) => {
   const valueRef = useRef<any>();
-  const {
-    suffixIcon = true,
-    value,
-    formatter,
-    placeholder,
-    tokenSeparator,
-  } = props;
+  const [state, { setState }] = useUpdateState<any>({
+    paragraphSuffix: '',
+    ellipsis: false,
+    value: props.value || [],
+  });
+
+  useEffect(() => {
+    setState({ value: props.value || [] });
+  }, [props.value]);
+
+  const { suffixIcon, value, formatter, placeholder, tokenSeparator } = props;
 
   /** 后缀 Icon */
   const renderSuffix = useCallback(() => {
@@ -86,18 +64,46 @@ const ValueContent = forwardRef<any, ValueContentProps>((props, ref) => {
    */
   // console.log(
   //   findDOMNode(valueRef.current)?.getBoundingClientRect(),
-  //   '>>>>>>>>>>>>',
+  //   '>>>>>>>>>>>>getBoundingClientRect',
   // );
+
+  // useEffect(() => {
+  //   if (valueRef.current) {
+  //     console.log(window.getComputedStyle(valueRef.current)?.getPropertyValue('font-size'), valueText, 'document.getElementByIdtest>>>>>>>>>>>>')
+  //   }
+  // }, [valueRef.current]);
+
+  const ellipsisText = useMemo(
+    () => getEllipsisText(state.value, props.ellipsisRender),
+    [props.ellipsisRender, state.value],
+  );
 
   return (
     <span className={kls} style={lastStyles} ref={ref}>
       {props.label && <span className={styles.label}>{props.label}</span>}
       <span className={styles.value} ref={valueRef}>
-        {valueText}
+        {valueText.length > 0 && (
+          <Typography.Paragraph
+            ellipsis={{
+              suffix: state.ellipsis && ellipsisText,
+              onEllipsis: ellipsis => {
+                setState({ ellipsis });
+              },
+            }}
+          >
+            {valueText}
+          </Typography.Paragraph>
+        )}
       </span>
       <span className={styles.suffix}>{renderSuffix()}</span>
     </span>
   );
 });
 
-export default ValueContent;
+EllipsisText.defaultProps = {
+  ellipsisRender: true,
+  suffixIcon: true,
+  placeholder: '请选择',
+};
+
+export default React.memo(EllipsisText);

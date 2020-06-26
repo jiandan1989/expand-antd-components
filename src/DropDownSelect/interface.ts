@@ -1,28 +1,6 @@
-import { ReactNode } from 'react';
 import { DropDownProps } from 'antd/lib/dropdown';
-import ValueContent from './ValueContent';
-
-interface BaseProps {
-  className?: string;
-  style?: React.CSSProperties;
-}
-
-export interface ValueContentProps extends BaseProps {
-  /** 左侧描述文案或自定义组件 */
-  label?: ReactNode;
-  /** 默认值 */
-  value?: string[];
-  /** 自定义格式化 */
-  formatter?: (value: string[]) => JSX.Element;
-  /** 传递数组时支持自定义分割符 */
-  tokenSeparator?: string;
-  /** 占位符 */
-  placeholder?: ReactNode;
-  /** 后缀 Icon */
-  suffixIcon?: ReactNode | boolean;
-  /** 展示区域最大宽度 */
-  maxWidth?: number;
-}
+import { EllipsisTextProps } from '@/EllipsisText/interface';
+import EllipsisText from '@/EllipsisText';
 
 export type ItemData = {
   /** 唯一的 key, 必须要有, 不做兼容 */
@@ -58,12 +36,12 @@ export interface DropDownSelectProps {
   /** 是否展示打勾 */
   showTick?: boolean;
   /** 内容区 */
-  valueProps?: Omit<ValueContentProps, 'value'>;
+  valueProps?: Omit<EllipsisTextProps, 'value'>;
   footerRender?: ((actions?: ActionType) => JSX.Element) | boolean;
 }
 
 export interface DropDownSelectInt extends React.FC<DropDownSelectProps> {
-  ValueContent: typeof ValueContent;
+  EllipsisText: typeof EllipsisText;
 }
 
 declare const DropDownSelect: DropDownSelectInt;

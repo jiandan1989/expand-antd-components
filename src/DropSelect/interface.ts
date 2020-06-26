@@ -2,33 +2,11 @@ import { ReactNode } from 'react';
 import { ActionType } from 'rc-trigger/lib/interface';
 import { ButtonProps } from 'antd/lib/button';
 import { DropDownProps } from 'antd/lib/dropdown';
-// import { TreeProps as RcTreeProps } from 'rc-tree';
 import { DataNode } from 'rc-tree/lib/interface';
 import { PopoverProps } from 'antd/lib/popover';
-
-interface BaseProps {
-  className?: string;
-  style?: React.CSSProperties;
-}
+import { EllipsisTextProps } from '@/EllipsisText/interface';
 
 export declare type RenderFunction = () => React.ReactNode;
-
-export interface ValueContentProps extends BaseProps {
-  /** 左侧描述文案或自定义组件 */
-  label?: ReactNode;
-  /** 默认值 */
-  value?: string[];
-  /** 自定义格式化 */
-  formatter?: (value: string[]) => string;
-  /** 传递数组时支持自定义分割符 */
-  tokenSeparator?: string;
-  /** 占位符 */
-  placeholder?: ReactNode;
-  /** 后缀 Icon */
-  suffixIcon?: ReactNode | boolean;
-  /** 展示区域最大宽度 */
-  maxWidth?: number;
-}
 
 type FilterOmitTypes = 'defaultVisible' | 'visible';
 
@@ -54,11 +32,11 @@ export interface DropSelectProps extends ExtendsType {
   };
   /** 触发 */
   trigger?: ActionType | ActionType[];
-  valueProps?: Omit<ValueContentProps, 'value'>;
+  valueProps?: Omit<EllipsisTextProps, 'value'>;
   /** 展示内容 value 的类型 */
   valueType: 'key' | 'title';
   /** 是否展示选择项 */
-  showItems?: (value: ValueContentProps['value']) => ReactNode | boolean;
+  showItems?: (value: EllipsisTextProps['value']) => ReactNode | boolean;
   /** 点击已选择项目数回调函数 */
   onItemsClick?(count: number): void;
   /** 底部操作: 是否需要清空操作 */
@@ -69,7 +47,7 @@ export interface DropSelectProps extends ExtendsType {
 }
 
 /** 下拉展示内容操作 */
-export interface PopContentProps extends BaseProps {}
+export interface PopContentProps {}
 
 /** 使用 DropDown版本 */
 export interface DropDownSelectProps {

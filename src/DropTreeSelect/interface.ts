@@ -1,29 +1,8 @@
-import { ReactNode } from 'react';
 import { PopoverProps } from 'antd/lib/popover';
+import { EllipsisTextProps } from '@/EllipsisText/interface';
+import { ReactNode } from 'react';
 
 export declare type ActionType = string;
-
-interface BaseProps {
-  className?: string;
-  style?: React.CSSProperties;
-}
-
-export interface ValueContentProps extends BaseProps {
-  /** 左侧描述文案或自定义组件 */
-  label?: ReactNode;
-  /** 默认值 */
-  value?: string[];
-  /** 自定义格式化 */
-  formatter?: (value: string[]) => JSX.Element;
-  /** 传递数组时支持自定义分割符 */
-  tokenSeparator?: string;
-  /** 占位符 */
-  placeholder?: ReactNode;
-  /** 后缀 Icon */
-  suffixIcon?: ReactNode | boolean;
-  /** 展示区域最大宽度 */
-  maxWidth?: number;
-}
 
 export type ItemData = {
   /** 唯一的 key, 必须要有, 不做兼容 */
@@ -54,9 +33,16 @@ export interface DropTreeSelectInt extends Omit<PopoverProps, TypeFilters> {
   mode?: ModeType;
   value?: string | string[] /** | Omit<ItemData, 'children'>[]; */;
   showSearch?: boolean;
-  contentRender?: (() => JSX.Element) | boolean;
   renderItem?(item: ItemData): JSX.Element;
-  valueProps?: Omit<ValueContentProps, 'value'>;
+  valueProps?: Omit<EllipsisTextProps, 'value'>;
+  /** 底部操作: 是否需要清空操作 */
+  actions?: { clean?: boolean };
+  /** 是否展示选择项 */
+  itemsRender?: ((value: EllipsisTextProps['value']) => ReactNode) | boolean;
+  /** 确定回调 */
+  onOk?(value: string[]): void;
+  /** 点击展示选中项的回调 */
+  onCountClick?(target: HTMLDivElement | null, selectedKeys: string[]): void;
 }
 
 declare const DropTreeSelect: DropTreeSelectInt;

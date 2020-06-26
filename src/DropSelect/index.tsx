@@ -9,15 +9,15 @@ import React, {
 import { Empty, Button, Popover, message } from 'antd';
 import { useBoolean } from 'ahooks';
 import useUpdateState from '@/hooks/useUpdateState';
+import EllipsisText from '@/EllipsisText';
 
-import ValueContent from './ValueContent';
 import SearchTree from './SearchTree';
 import { DropSelectProps } from './interface';
 import styles from './index.less';
 
 const DropSelect: FC<DropSelectProps> = props => {
   /** 控制是否显示 */
-  const [visible, { toggle, setFalse }] = useBoolean();
+  const [visible, { toggle, setFalse, setTrue }] = useBoolean();
   const { showItems = true, valueType = 'title' } = props;
   const ref = useRef<any>();
 
@@ -30,20 +30,6 @@ const DropSelect: FC<DropSelectProps> = props => {
   useEffect(() => {
     setState({ value: props.value || [] });
   }, [props.value]);
-
-  /** 点击其他地方关闭 */
-  // const handler = (event: Event) => {
-  //   if (!document.querySelector(`.${styles.trigger_wrapper}`)?.contains(event.target)) {
-  //     // @todo
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   document.addEventListener('click', handler);
-  //   return () => {
-  //     document.removeEventListener('click', handler);
-  //   };
-  // }, []);
 
   /** 清空 */
   const clean = useCallback(() => {
@@ -146,12 +132,12 @@ const DropSelect: FC<DropSelectProps> = props => {
     );
   };
 
-  const trigger = () => {
-    if (props.disabled) {
-      return;
+  const onVisibleChange = (flag: boolean) => {
+    if (flag) {
+      setTrue();
+    } else {
+      setFalse();
     }
-
-    toggle();
   };
 
   const valueList = useMemo(
@@ -165,11 +151,12 @@ const DropSelect: FC<DropSelectProps> = props => {
       placement="bottomLeft"
       trigger={props.trigger}
       content={renderContent()}
+      onVisibleChange={onVisibleChange}
       getPopupContainer={() => ref.current}
       overlayStyle={{ minHeight: 400 }}
     >
-      <span ref={ref} className={styles.trigger_wrapper} onClick={trigger}>
-        <ValueContent {...props.valueProps} value={valueList} />
+      <span ref={ref} className={styles.trigger_wrapper}>
+        <EllipsisText {...props.valueProps} value={valueList} />
       </span>
     </Popover>
   );
