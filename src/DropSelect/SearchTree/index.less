@@ -1,0 +1,28 @@
+.wrapper {
+  overflow: hidden;
+  height: 400px;
+  padding: 12px;
+
+  .tree_wrapper {
+    height: calc(100% - 32px);
+    overflow: auto;
+  }
+}
+
+.search {
+  margin-bottom: 8px;
+  :global {
+    .ant-input-suffix {
+      display: none;
+      color: #999;
+    }
+  }
+
+  &:hover {
+    :global {
+      .ant-input-suffix {
+        display: flex;
+      }
+    }
+  }
+}

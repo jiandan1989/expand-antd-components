@@ -1,0 +1,31 @@
+.transfer_item_wrapper {
+  flex: 1;
+  box-sizing: border-box;
+  border: 1px #eee solid;
+
+  .transfer_item_title {
+    padding: 8px 16px;
+    box-sizing: border-box;
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    border-bottom: 1px #eee solid;
+  }
+
+  .transfer_item_tree_wrapper {
+    box-sizing: border-box;
+    padding: 8px;
+    height: calc(~'100% - 38px');
+    overflow: hidden;
+
+    .search_wrapper {
+      padding-bottom: 16px;
+    }
+
+    .transfer_item_directory_tree_wrapper {
+      height: calc(~'100% - 40px');
+      overflow: auto;
+    }
+  }
+}

@@ -1,0 +1,33 @@
+.content {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  line-height: 1;
+  padding: 5px 1px;
+  font-size: 12px;
+  border-bottom: 1px #999 solid;
+  white-space: nowrap;
+  min-width: 200px;
+  max-width: 300px;
+  transition: all 0.2s linear;
+
+  .label {
+    color: #999;
+    margin-right: 5px;
+  }
+
+  .value {
+    flex: 100%;
+    overflow: hidden;
+
+    :global {
+      .ant-typography {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  .suffix {
+    margin-left: 5px;
+  }
+}

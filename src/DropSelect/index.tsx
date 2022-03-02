@@ -1,51 +1,162 @@
-import React, { FC, useRef } from 'react';
-import { Popover } from 'antd';
+import React, {
+  FC,
+  useRef,
+  useMemo,
+  useState,
+  useEffect,
+  useCallback,
+} from 'react';
+import { Empty, Button, Popover, message } from 'antd';
 import { useBoolean } from 'ahooks';
+import useUpdateState from '@/hooks/useUpdateState';
+import EllipsisText from '@/EllipsisText';
 
-import ValueContent from './ValueContent';
-import styles from './index.less';
-import { DropSelectProps } from './interface';
 import SearchTree from './SearchTree';
-import PopFooter from './PopFooter';
+import { DropSelectProps } from './interface';
+import styles from './index.less';
 
 const DropSelect: FC<DropSelectProps> = props => {
-  const ref = useRef<any>();
   /** 控制是否显示 */
-  const [visible, { toggle }] = useBoolean(false);
+  const [visible, { toggle, setFalse, setTrue }] = useBoolean();
+  const { showItems = true, valueType = 'title' } = props;
+  const ref = useRef<any>();
 
-  const renderChild = () => {
-    return <ValueContent {...props.valueProps} />;
+  /** 选中的数据 */
+  const [list, setList] = useState<any[]>([]);
+  const [state, { setState }] = useUpdateState({
+    value: props.value || [],
+  });
+
+  useEffect(() => {
+    setState({ value: props.value || [] });
+  }, [props.value]);
+
+  /** 清空 */
+  const clean = useCallback(() => {
+    setState({ value: [] });
+  }, []);
+
+  const onChangeTree = (keys: string[], checkedList: any[]) => {
+    if (props.onChange) {
+      props.onChange(keys);
+    }
+
+    setList(checkedList);
+
+    setState({ value: keys });
   };
 
-  /** 弹框内容 */
-  const renderContent = () => {
+  /** 确定 */
+  const onOk = () => {
+    if (props.okButtonProps?.disabled) {
+      return false;
+    }
+
+    if (props.onChange) {
+      props.onChange(state.value);
+    }
+
+    if (props.onOk) {
+      props.onOk(state.value);
+    }
+
+    setFalse();
+  };
+
+  /** 点击选择项回调函数 */
+  const onClickCount = () => {
+    message.success('点击');
+  };
+
+  const valueCount = useMemo(() => state.value.length, [state.value]);
+  /** 展示选择项 */
+  const renderItems = () => {
+    if (typeof showItems === 'function') {
+      return <div className={styles.items}>{showItems([])}</div>;
+    }
+
+    return showItems ? (
+      <div className={styles.items}>
+        已选择&nbsp;
+        <a onClick={onClickCount}>{valueCount}</a> 项
+      </div>
+    ) : null;
+  };
+
+  /** 是否展示清空操作 */
+  const renderClean = () => {
+    if (!props.actions?.clean) return null;
     return (
-      <div>
-        <SearchTree />
-        <PopFooter />
+      <div className={styles.clean} onClick={clean}>
+        清空
       </div>
     );
   };
 
-  const trigger = () => {
-    if (props.disabled) {
-      return;
-    }
+  /** 如果没有 treeData 或者为空 */
+  const isTreeDataEmpty = useMemo(
+    () =>
+      !props.treeData ||
+      (Array.isArray(props.treeData) && props.treeData.length === 0),
+    [props.treeData],
+  );
 
-    toggle();
+  /** 弹框内容 */
+  const renderContent = () => {
+    return isTreeDataEmpty ? (
+      <Empty description="暂无数据" />
+    ) : (
+      <div className={styles.pop_content}>
+        <SearchTree
+          value={state.value}
+          // @ts-ignore
+          onChange={onChangeTree}
+          treeData={props.treeData}
+        />
+        <div className={styles.pop_footer}>
+          {renderItems()}
+          {/* 如果只有一个子节点, 直接显示到右侧 */}
+          <div className={styles.actions}>
+            {renderClean()}
+            <Button
+              type="primary"
+              size="small"
+              onClick={onOk}
+              {...props.okButtonProps}
+            >
+              确定
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
   };
+
+  const onVisibleChange = (flag: boolean) => {
+    if (flag) {
+      setTrue();
+    } else {
+      setFalse();
+    }
+  };
+
+  const valueList = useMemo(
+    () => (valueType === 'key' ? state.value : list.map(item => item.title)),
+    [valueType, state.value, list],
+  );
 
   return (
     <Popover
       visible={visible}
-      placement="bottom"
+      placement="bottomLeft"
       trigger={props.trigger}
       content={renderContent()}
+      onVisibleChange={onVisibleChange}
       getPopupContainer={() => ref.current}
       overlayStyle={{ minHeight: 400 }}
     >
-      <span ref={ref} className={styles.trigger_wrapper} onClick={trigger}>
-        {renderChild()}
+      <span ref={ref} className={styles.trigger_wrapper}>
+        <EllipsisText {...props.valueProps} value={valueList} />
       </span>
     </Popover>
   );

@@ -17,6 +17,34 @@
   }
 }
 
+.content_wrapper {
+  max-height: 400px;
+  overflow: auto;
+  scroll-behavior: smooth;
+
+  .menu_wrapper {
+    border: none;
+    font-size: 14px;
+
+    :global {
+      .ant-menu-item {
+        padding: 5px 12px;
+        line-height: 1.5;
+        height: auto;
+      }
+    }
+  }
+}
+
+.item_wrapper {
+  display: flex;
+  align-items: center;
+
+  .item_content {
+    flex: 100%;
+  }
+}
+
 .pop_content {
   background-color: transparent;
 }
@@ -29,7 +57,6 @@
 
   .items {
     line-height: 1;
-    // transform: scale(0.8);
   }
 
   .actions {
