@@ -1,0 +1,52 @@
+@rootCls: nz-label;
+
+.@{rootCls} {
+  display: inline-block;
+  height: 30px;
+  padding: 0 4px;
+  font-size: 12px;
+  line-height: 30px;
+  border-radius: 2px;
+  white-space: nowrap;
+  cursor: pointer;
+
+  .@{rootCls}-clear {
+    display: none;
+  }
+
+  &-icon {
+    margin-left: 4px;
+  }
+
+  &-allow-clear:hover:not(.@{rootCls}-disabled) {
+    // 并且有值才隐藏
+    .@{rootCls}-arrow {
+      display: none;
+    }
+
+    .@{rootCls}-clear {
+      display: inline-block;
+    }
+  }
+
+  &-disabled {
+    cursor: not-allowed;
+  }
+
+  &-default {
+    height: 32px;
+    padding: 0 12px;
+  }
+
+  &-small {
+    background-color: red;
+  }
+
+  &-bordered {
+    border: 1px solid #d9d9d9;
+  }
+
+  &-content {
+    color: blue;
+  }
+}
