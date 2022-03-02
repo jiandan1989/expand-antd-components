@@ -50,6 +50,13 @@ const Label: React.FC<LabelProps> = props => {
   //     }
   //   }
   // }, [containerRef, rect.width, value]);
+  /**
+   * @todo
+   * 1. 动态计算能够容纳的字符长度
+   * 2. 超出长度 并且允许省略 slice
+   * 3. 允许自定义渲染中间内容 tooptip 啥的
+   * 4. formatter 和 省略结合
+   */
 
   return (
     <div style={style} className={wrapperKls}>
